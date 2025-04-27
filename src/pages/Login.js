@@ -1,51 +1,61 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // <-- Link added here
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://barbara-backend-production.up.railway.app/api/auth/login", {
-        email,
-        password,
-      });
-
-      const token = response.data.token;
-      localStorage.setItem("token", token);
+      const response = await axios.post("https://your-backend-url/api/auth/login", { email, password });
+      localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (error) {
-      console.error(error.response?.data?.msg || "Login failed");
-      alert("Login failed. Check credentials.");
+      console.error("Login error:", error);
+      alert("Login failed. Check your credentials.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded shadow-md" onSubmit={handleLogin}>
-        <h1 className="text-2xl mb-4">Login to Barbara</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 mb-4 w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 mb-4 w-full"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button className="bg-blue-500 text-white p-2 w-full rounded" type="submit">
-          Login
-        </button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-green-100">
+      <div className="bg-white p-8 rounded shadow-md w-96">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">Barbara Login</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border p-2 rounded"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="border p-2 rounded"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Link to Register */}
+        <p className="text-center text-sm text-gray-600 mt-4">
+          Don't have an account? 
+          <Link to="/register" className="text-green-500 hover:underline ml-1">
+            Register here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
