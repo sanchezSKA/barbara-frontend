@@ -11,7 +11,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://your-backend-url.up.railway.app/api/auth/register", {
+      await axios.post("https://barbara-backend-production.up.railway.app/api/auth/register", {
         email,
         password,
         company_name: companyName,
